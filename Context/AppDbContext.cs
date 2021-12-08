@@ -7,7 +7,8 @@ namespace NoteMiniApi.Context
     {
         private string _connectionString = "Server=DESKTOP-A0EEVH8\\SQLEXPRESS;Database=NoteAPIDB;Trusted_Connection=True;MultipleActiveResultSets=true";
 
-        public DbSet<Note> Notes {get; set;}      
+        public DbSet<Note> Notes {get; set;}   
+        public DbSet<User> Users {get; set;}   
 
          protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
