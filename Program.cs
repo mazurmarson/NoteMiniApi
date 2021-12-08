@@ -1,8 +1,10 @@
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using NoteMiniApi.Context;
 using NoteMiniApi.Models;
 using NoteMiniApi.Requests;
 using NoteMiniApi.Services;
+using NoteMiniApi.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +14,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>();
 builder.Services.AddScoped<INoteService, NoteService>();
+builder.Services.AddValidatorsFromAssemblyContaining(typeof(NoteValidator));
 
 var app = builder.Build();
 

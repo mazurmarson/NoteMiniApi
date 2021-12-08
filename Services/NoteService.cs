@@ -9,6 +9,10 @@ namespace NoteMiniApi.Services
        IEnumerable<Note> GetNotes();
        Note GetNoteById(int Id);
         void AddNote(Note note);
+        void DeleteNote(Note note);
+
+        void UpdateNote(Note note);
+
     }
     public class NoteService : INoteService
     {
@@ -33,6 +37,21 @@ namespace NoteMiniApi.Services
         {
             note.CreateAt = DateTime.Now;
             _context.Notes.Add(note);
+            _context.SaveChanges();
+        }
+
+        public void DeleteNote(Note note)
+        {
+
+            _context.Notes.Remove(note);
+            _context.SaveChanges();
+        }
+
+
+
+        public void UpdateNote(Note note)
+        {
+         _context.Notes.Update(note);
             _context.SaveChanges();
         }
     }

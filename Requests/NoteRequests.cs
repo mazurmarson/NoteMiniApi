@@ -1,3 +1,4 @@
+using FluentValidation;
 using NoteMiniApi.Models;
 using NoteMiniApi.Services;
 
@@ -17,7 +18,20 @@ namespace NoteMiniApi.Requests
 
             app.MapPost("/notes", NoteRequests.CreateNote)
             .Produces<Note>(StatusCodes.Status201Created)
-            .Accepts<Note>("application/json");
+            .Accepts<Note>("application/json")
+            .WithValidator<Note>();
+
+            app.MapPut("/notes", NoteRequests.UpdateNote)
+            .Produces<Note>(StatusCodes.Status201Created)
+            .Produces<Note>(StatusCodes.Status404NotFound)
+            .Accepts<Note>("application/json")
+            .WithValidator<Note>();
+
+            app.MapDelete("/notes/{id}", NoteRequests.DeleteNote)
+            .Produces<Note>(StatusCodes.Status204NoContent)
+            .Produces<Note>(StatusCodes.Status204NoContent)
+            .Produces<Note>(StatusCodes.Status404NotFound)
+            .ExcludeFromDescription();
 
             return app;
         }
@@ -40,9 +54,32 @@ namespace NoteMiniApi.Requests
 
         public static IResult CreateNote(INoteService service, Note note)
         {
+
             service.AddNote(note);
 
             return Results.Created($"/notes/{note.Id}", note);
+        }
+
+        public static IResult DeleteNote(INoteService service, int Id)
+        {
+            var note = service.GetNoteById(Id);
+            if(note == null)
+            {
+                return Results.NotFound();
+            }
+            service.DeleteNote(note);
+            return Results.NoContent();
+        }
+
+        public static IResult UpdateNote(INoteService service, Note note)
+        {
+            if(note == null)
+            {
+                return Results.NotFound();
+            }
+            note.CreateAt = System.DateTime.Now;
+            service.UpdateNote(note);
+            return Results.NoContent();
         }
     }
 }
