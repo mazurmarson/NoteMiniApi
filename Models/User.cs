@@ -4,12 +4,16 @@ namespace NoteMiniApi.Models
     {
         public User(Guid id, string name, string passwordHash)
         {
-            this.id = id;
+            this.Id = id;
             this.Name = name;
             this.PasswordHash = passwordHash;
 
         }
-        public Guid id { get; set; }
+        public User()
+        {
+
+        }
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public string PasswordHash { get; set; }
     }
