@@ -8,10 +8,12 @@ namespace NoteMiniApi.Services
     {
        IEnumerable<Note> GetNotes();
        Note GetNoteById(int Id);
-        void AddNote(Note note);
+        void AddNote(Note note, string userId);
         void DeleteNote(Note note);
 
         void UpdateNote(Note note);
+        IEnumerable<Note> GetUserNotes(string userId);
+        bool isUserNote(string userId, int noteId);
 
     }
     public class NoteService : INoteService
@@ -33,9 +35,11 @@ namespace NoteMiniApi.Services
             return note;
         }
 
-        public void AddNote(Note note)
+        public void AddNote(Note note, string userId)
         {
+            var user = _context.Users.Where(x => x.Id == Guid.Parse(userId)).FirstOrDefault();
             note.CreateAt = DateTime.Now;
+            note.User = user;
             _context.Notes.Add(note);
             _context.SaveChanges();
         }
@@ -54,5 +58,17 @@ namespace NoteMiniApi.Services
          _context.Notes.Update(note);
             _context.SaveChanges();
         }
+
+        public IEnumerable<Note> GetUserNotes(string userId)
+        {
+            var notes = _context.Notes.Where(x => x.UserId == Guid.Parse(userId)).ToList();
+            return notes;
+        }
+
+        public bool isUserNote(string userId, int noteId)
+        {
+            return _context.Notes.Where(x => x.Id == noteId).Any(x => x.UserId == Guid.Parse(userId));
+        }
+
     }
 }

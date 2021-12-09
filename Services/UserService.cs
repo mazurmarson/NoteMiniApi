@@ -45,7 +45,7 @@ namespace NoteMiniApi.Services
 
         }
 
-        
+
 
             public string GenerateJwt(LoginDto dto)
         {

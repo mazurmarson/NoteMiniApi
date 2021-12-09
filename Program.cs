@@ -38,7 +38,7 @@ builder.Services.AddScoped<INoteService, NoteService>();
 builder.Services.AddValidatorsFromAssemblyContaining(typeof(NoteValidator));
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
-
+builder.Services.AddAuthorization();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -48,6 +48,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseAuthentication();
+app.UseAuthorization();
 app.UseHttpsRedirection();
 
 NoteRequests.RegisterEndpoints(app);
